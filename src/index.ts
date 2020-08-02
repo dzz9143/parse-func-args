@@ -1,3 +1,3 @@
-import { parse } from './parser';
+import { parseFuncArgs } from './parser';
 
-export { parse };
+export { parseFuncArgs };

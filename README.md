@@ -1,7 +1,6 @@
-## Typescript NodeJS General Library Starter
+Not usable right now, in development
 
-Nodejs library starter for nodejs, which include all neccessary settings & configs for: 
-* build pipeline
-* test based on Jest
-* lint for ts & js
-* npm publish management
+## ToDo
+1. Do the type augment for `Function` & `Identifier` type for acorn
+2. State type describe for recursive walk
+3. Jest should use native javascript to run all the test(should change npm script accordingly)
