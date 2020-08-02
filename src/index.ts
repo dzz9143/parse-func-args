@@ -1,3 +1,3 @@
-import sum from './sum';
+import { parse } from './parser';
 
-export { sum };
+export { parse };
