@@ -1,23 +1,59 @@
-import { parse } from 'acorn';
+import { parse, Node } from 'acorn';
 import { recursive } from 'acorn-walk';
+import debug from 'debug';
 
-function parseFuncArgs(func: Function): string[] {
+const dlog = debug('func-arg-parser');
+
+/* eslint-disable @typescript-eslint/no-empty-interface */
+interface PatternNode extends Node {}
+
+interface IdentifierNode extends PatternNode {
+    type: 'Identifier';
+    name: string;
+}
+
+interface FunctionNode extends Node {
+    id: IdentifierNode;
+    params: PatternNode[];
+}
+
+export interface Arg {
+    name: string;
+    type: string;
+}
+
+function parseFuncArgs(func: Function): Arg[] {
     if (typeof func !== 'function') {
         throw new TypeError('parse: input func must be a function type');
     }
 
     const ast = parse(func.toString());
-    const state: any = { args: [] };
+    const state = {
+        result: [] as Arg[],
+    };
     recursive(ast, state, {
-        // we only care about first Function node
-        Function(node: any, state) {
-            for (const param of node.params) {
-                state.args.push(param.name);
+        // Only care about first Function node
+        Function(func: FunctionNode, state) {
+            for (const param of func.params) {
+                dlog('param node:', param);
+                switch (param.type) {
+                    case 'Identifier':
+                        const p = param as IdentifierNode;
+                        state.result.push({
+                            name: p.name,
+                            type: 'simple',
+                        });
+                        break;
+                    default:
+                        state.result.push({
+                            name: undefined,
+                            type: 'unknown',
+                        });
+                }
             }
         },
     });
-    console.debug('args:', state.args);
-    return state.args;
+    return state.result;
 }
 
 export { parseFuncArgs };

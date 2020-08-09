@@ -1,8 +1,19 @@
-const { sum } = require("../lib/sum");
+const dotenv = require('dotenv');
+dotenv.config()
+const { parseFuncArgs } = require('../lib');
 
-function run(){
-    const res = sum(1, 100);
-    console.log("res:", res);
+function test(a, b, c, ...d) {
+
 }
 
-run();
+// function test({ a = e, b: f, c: g }) {
+//     return;
+// }
+
+// function whois({ displayName, fullName: { firstName: name } }) {
+//     return `${displayName} is ${name}`;
+// }
+
+// test({ a: 1, b: { e: 3, f: 4 }, c: 3 })
+
+console.log(parseFuncArgs(test))
